@@ -1,0 +1,11 @@
+<country-search-input 
+  placeholderParam="Buscar por capital del pais"
+  (value) = "query.set($event)"
+/>
+
+@if(countryResource.error()) {
+  <h3>{{countryResource.error()}}</h3>
+} @if(countryResource.hasValue()) {
+  <country-list [countries]="countryResource.value()!"/>
+}
+

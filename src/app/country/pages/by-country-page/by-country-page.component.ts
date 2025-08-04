@@ -1,0 +1,25 @@
+import { Component, inject, resource, signal } from '@angular/core';
+import { CountryListComponent } from '../../components/country-list/country-list.component';
+import { SearchInputComponent } from '../../components/search-input/search-input.component';
+import { CountryService } from '../../services/country.service';
+import { of } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
+
+@Component({
+  selector: 'app-by-country-page',
+  imports: [SearchInputComponent, CountryListComponent],
+  templateUrl: './by-country-page.component.html',
+})
+export class ByCountryPage {
+  countryService = inject(CountryService)
+  query = signal('')
+
+  countryResource = rxResource({
+    params: () => ({ query: this.query() }),
+    stream: ({ params }) => {
+      if(!params.query) return of([])
+
+      return this.countryService.searchByCountry(params.query)
+    }
+  })
+}

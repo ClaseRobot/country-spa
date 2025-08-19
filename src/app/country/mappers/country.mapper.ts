@@ -11,7 +11,7 @@ export class CountryMapper {
       cca2: item.cca2,
       flag: item.flags.svg,
       flagSvg: item.flags.png,
-      capital: item.capital[0],
+      capital: item.capital?.join(''),
       region: item.region,
       subRegion: item.subregion,
       population: item.population,

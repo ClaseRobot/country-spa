@@ -6,6 +6,11 @@
     autofocus
     #txtSearch
     (keyup.enter)="value.emit(txtSearch.value)"
+    (Keyup)="inputValue.set(txtSearch.value)"
+    [value]="inputValue()"
   >
   <button class="btn btn-primary" (click)="value.emit(txtSearch.value)">Buscar</button>
 </section>
+
+<!-- Value se emite entres situaciones: cuando se presiona enter, cuando se hace click -->
+<!-- o cuando el debounce finaliza su timer (cuando se deja de escribir) -->

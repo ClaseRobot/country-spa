@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, linkedSignal, signal } from '@angular/core';
 import { SearchInputComponent } from "../../components/search-input/search-input.component";
 import { CountryListComponent } from '../../components/country-list/country-list.component';
 import { CountryService } from '../../services/country.service';
 import { of } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -13,13 +14,27 @@ import { rxResource } from '@angular/core/rxjs-interop';
 export class ByCapitalPage {
 
   countryService = inject(CountryService)
-  query = signal('')
+  activatedRoute = inject(ActivatedRoute) // acceso a la ruta asociada a este componente
+
+  router = inject(Router)
+
+  // con queryParam obtengo el valor del parametro de la url llamado query.
+  // Snapshot no es reactivo
+  queryParam = this.activatedRoute.snapshot.queryParamMap.get('query') ?? ''
+  
+  query = linkedSignal(() => this.queryParam)
 
   // Con RxResource ( con Observables )
   countryResource = rxResource({
     params: () => ({ query: this.query() }),
     stream: ({ params }) => {
       if( !params.query ) return of([])
+
+        this.router.navigate(['/country/by-capital'], {
+          queryParams: {
+            query: params.query
+          }
+        })
 
         return this.countryService.searchByCapital(params.query)
     }

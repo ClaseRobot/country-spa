@@ -1,6 +1,8 @@
 <country-search-input 
   placeholderParam="Buscar por capital del pais"
   (value) = "query.set($event)"
+  [debounceTime] = 500
+  [initialValue]="query()"
 />
 
 @if(countryResource.error()) {
@@ -9,3 +11,5 @@
   <country-list [countries]="countryResource.value()!"/>
 }
 
+<!-- en la signal query se recibe el valor emitido por el hijo -->
+<!-- (value) = "query.set($event)" -->
